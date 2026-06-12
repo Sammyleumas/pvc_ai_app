@@ -1,0 +1,6 @@
+{
+  "name": "Professional Vibe Coding Academy",
+  "description": "A gamified study quest with immersive levels, quizzes, a functional leaderboard, and a cyber-aesthetic layout to master the PVC-AID certification.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
