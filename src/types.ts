@@ -13,6 +13,7 @@ export interface PlayerProfile {
   level: number;
   completedModules: number[]; // Array of completed module IDs
   badges: string[];
+  email?: string;
 }
 
 export interface RivalPlayer {

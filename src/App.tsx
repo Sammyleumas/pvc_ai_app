@@ -13,6 +13,7 @@ import Leaderboard from './components/Leaderboard.tsx';
 import ModuleScreen from './components/ModuleScreen.tsx';
 import GameHUD from './components/GameHUD.tsx';
 import ParticleExplosion from './components/ParticleExplosion.tsx';
+import Certificate from './components/Certificate.tsx';
 import { Sparkles, GraduationCap, Flame, Award } from 'lucide-react';
 
 const LOCAL_STORAGE_PROFILE_KEY = 'pvcaid_player_profile_v2';
@@ -37,6 +38,7 @@ export default function App() {
   const [selectedModule, setSelectedModule] = useState<StudyModule | null>(null);
   const [isExploding, setIsExploding] = useState(false);
   const [appLoading, setAppLoading] = useState(true);
+  const [showCertificate, setShowCertificate] = useState(false);
 
   // Load persistence state on mount
   useEffect(() => {
@@ -125,6 +127,13 @@ export default function App() {
     };
 
     saveProfileState(updatedProfile);
+
+    // If final module was completed, launch the official graduation certificate popup!
+    if (updatedCompleted.length === STUDY_MODULES.length && !isAlreadyCompleted) {
+      setTimeout(() => {
+        setShowCertificate(true);
+      }, 4000);
+    }
 
     // Active particle blowout
     setIsExploding(true);
@@ -259,6 +268,7 @@ export default function App() {
             completedPercent={overallPercent}
             currentRank={getLeaderboardRank()}
             onReset={handleWipeProfile}
+            onShowCertificate={() => setShowCertificate(true)}
           />
 
           <AnimatePresence mode="wait">
@@ -312,6 +322,14 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* SECURE DIPLOMA SYSTEM OVERLAY */}
+      {showCertificate && (
+        <Certificate
+          profile={profile}
+          onClose={() => setShowCertificate(false)}
+        />
+      )}
 
     </div>
   );

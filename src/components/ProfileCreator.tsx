@@ -66,6 +66,7 @@ const CLASSES: Array<{
 
 export default function ProfileCreator({ onProfileCreated }: ProfileCreatorProps) {
   const [gamerTag, setGamerTag] = useState('');
+  const [email, setEmail] = useState('abiodunsamuel112@gmail.com');
   const [selectedAvatar, setSelectedAvatar] = useState(AVATARS[0].emoji);
   const [selectedClass, setSelectedClass] = useState<CharacterClass>('Prompt Wizard');
   const [errorMessage, setErrorMessage] = useState('');
@@ -84,6 +85,11 @@ export default function ProfileCreator({ onProfileCreated }: ProfileCreatorProps
       soundManager.playFail();
       return;
     }
+    if (!email.trim() || !email.includes('@')) {
+      setErrorMessage('A valid email is required for certification delivery.');
+      soundManager.playFail();
+      return;
+    }
 
     const defaultProfile: PlayerProfile = {
       gamerTag: gamerTag.trim(),
@@ -92,7 +98,8 @@ export default function ProfileCreator({ onProfileCreated }: ProfileCreatorProps
       xp: 0,
       level: 1,
       completedModules: [],
-      badges: []
+      badges: [],
+      email: email.trim()
     };
 
     soundManager.playLevelUp();
@@ -126,20 +133,41 @@ export default function ProfileCreator({ onProfileCreated }: ProfileCreatorProps
           {/* Section 1: Name and Avatar */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-4">
-              <label className="block text-sm font-semibold tracking-wide text-cyan-400 uppercase font-mono">
-                Gamer Tag / Username
-              </label>
-              <input
-                id="gamer-tag-input"
-                type="text"
-                placeholder="Enter elite tag..."
-                value={gamerTag}
-                onChange={(e) => {
-                  setGamerTag(e.target.value);
-                  setErrorMessage('');
-                }}
-                className="w-full bg-[#0d0d19] border border-blue-900/60 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-slate-100 font-mono placeholder-slate-600 transition-all text-lg"
-              />
+              <div>
+                <label className="block text-xs font-semibold tracking-wide text-cyan-400 uppercase font-mono mb-2">
+                  Gamer Tag / Username
+                </label>
+                <input
+                  id="gamer-tag-input"
+                  type="text"
+                  placeholder="Enter elite tag..."
+                  value={gamerTag}
+                  onChange={(e) => {
+                    setGamerTag(e.target.value);
+                    setErrorMessage('');
+                  }}
+                  className="w-full bg-[#0d0d19] border border-blue-900/60 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-slate-100 font-mono placeholder-slate-600 transition-all text-base"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold tracking-wide text-indigo-400 uppercase font-mono mb-2">
+                  Email Address for Verification ID
+                </label>
+                <input
+                  id="email-input"
+                  type="email"
+                  placeholder="name@email.com"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setErrorMessage('');
+                  }}
+                  className="w-full bg-[#0d0d19] border border-blue-900/60 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-100 font-mono placeholder-slate-600 transition-all text-base"
+                />
+                <span className="text-[10px] text-slate-500 font-mono mt-1 block">Your official certificate of completion is attached directly to this address.</span>
+              </div>
+
               {errorMessage && (
                 <p className="text-rose-400 text-xs font-mono">{errorMessage}</p>
               )}

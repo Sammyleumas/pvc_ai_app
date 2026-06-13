@@ -15,9 +15,10 @@ interface GameHUDProps {
   completedPercent: number;
   currentRank: number;
   onReset: () => void;
+  onShowCertificate: () => void;
 }
 
-export default function GameHUD({ profile, completedPercent, currentRank, onReset }: GameHUDProps) {
+export default function GameHUD({ profile, completedPercent, currentRank, onReset, onShowCertificate }: GameHUDProps) {
   const [isMuted, setIsMuted] = useState(soundManager.isMuted());
   const [showAchievementsModal, setShowAchievementsModal] = useState(false);
 
@@ -97,8 +98,31 @@ export default function GameHUD({ profile, completedPercent, currentRank, onRese
         </div>
 
         {/* Right Col: Menu action triggers controls */}
-        <div className="flex items-center justify-start md:justify-end space-x-3">
+        <div className="flex items-center justify-start md:justify-end gap-3 flex-wrap">
           
+          {/* Certificate Toggle button */}
+          {completedPercent === 100 ? (
+            <button
+              id="certificate-claim-hud-btn"
+              onClick={() => {
+                soundManager.playClick();
+                onShowCertificate();
+              }}
+              className="flex items-center space-x-1.5 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 border border-yellow-400 text-[#090912] px-4 py-2 rounded-xl text-xs font-mono font-black shadow-[0_0_20px_rgba(245,158,11,0.45)] hover:shadow-[0_0_25px_rgba(245,158,11,0.65)] hover:scale-105 cursor-pointer transition-all"
+            >
+              <span>🎓 CLAIM CERTIFICATE</span>
+            </button>
+          ) : (
+            <button
+              id="certificate-locked-hud-btn"
+              disabled
+              title="Unlock all 10 modules in the Quest Map to claim official graduation credentials!"
+              className="flex items-center space-x-1.5 bg-[#0e0e1a] border border-slate-900 px-4 py-2 rounded-xl text-xs font-mono text-slate-500 opacity-70 cursor-not-allowed"
+            >
+              <span>🔒 CERTIFICATE ({profile.completedModules.length}/10)</span>
+            </button>
+          )}
+
           {/* Achievements modal button */}
           <button
             id="achievements-btn"
